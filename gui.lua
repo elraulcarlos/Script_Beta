@@ -23,7 +23,6 @@ frame.Active = true
 frame.Draggable = false
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
--- Encabezado
 local header = Instance.new("Frame", frame)
 header.Size = UDim2.new(1, 0, 0, 40)
 header.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -42,7 +41,6 @@ scriptTitle.Font = Enum.Font.GothamBold
 scriptTitle.TextSize = 16
 scriptTitle.TextXAlignment = Enum.TextXAlignment.Left
 
--- Minimizar
 local minimizeBtn = Instance.new("TextButton", header)
 minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
 minimizeBtn.Position = UDim2.new(1, -40, 0.5, -15)
@@ -54,7 +52,6 @@ minimizeBtn.Text = "-"
 minimizeBtn.BorderSizePixel = 0
 Instance.new("UICorner", minimizeBtn).CornerRadius = UDim.new(0, 6)
 
--- Restaurar
 local restoreBtn = Instance.new("TextButton", gui)
 restoreBtn.Size = UDim2.new(0, 140, 0, 40)
 restoreBtn.Position = UDim2.new(0.5, -70, 0.5, -20)
@@ -80,7 +77,6 @@ restoreBtn.MouseButton1Click:Connect(function()
     restoreBtn.Visible = false
 end)
 
--- Movimiento desde encabezado
 local dragging = false
 local dragStart, startPos
 
@@ -105,7 +101,6 @@ UserInputService.InputEnded:Connect(function(input)
     end
 end)
 
--- Sidebar
 local sidebar = Instance.new("Frame", frame)
 sidebar.Size = UDim2.new(0, 120, 1, -40)
 sidebar.Position = UDim2.new(0, 0, 0, 40)
@@ -113,7 +108,6 @@ sidebar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 sidebar.BorderSizePixel = 0
 Instance.new("UICorner", sidebar).CornerRadius = UDim.new(0, 0)
 
--- Área de contenido
 local content = Instance.new("ScrollingFrame", frame)
 content.Size = UDim2.new(1, -120, 1, -40)
 content.Position = UDim2.new(0, 120, 0, 40)
@@ -240,6 +234,8 @@ local function showMain()
             flyToggle.Text = "🛑 Desactivar Fly"
         end
     end)
+
+    content.CanvasSize = UDim2.new(0, 0, 0, 140)
 end
 
 -- Función: Automatic (Fogata)
@@ -293,9 +289,9 @@ local function showAutomatic()
             TweenService:Create(knob, TweenInfo.new(0.2), {BackgroundColor3 = knobColor}):Play()
 
             if active then
-                local fogata = workspace:FindFirstChild("Campfire")
+                local fogata = Workspace:FindFirstChild("Campfire")
                 if fogata and fogata:FindFirstChild("WoodSlot") then
-                    for _, item in ipairs(workspace:GetDescendants()) do
+                    for _, item in ipairs(Workspace:GetDescendants()) do
                         if item:IsA("Tool") and item.Name == "Wood" then
                             item.Parent = fogata.WoodSlot
                         end
@@ -304,4 +300,112 @@ local function showAutomatic()
             end
         end
     end)
+
+    content.CanvasSize = UDim2.new(0, 0, 0, 140)
+end
+
+-- Función: Visual (ESP toggles + activador real)
+local function showVisual()
+    clearContent()
+
+    local label = Instance.new("TextLabel", content)
+    label.Size = UDim2.new(1, 0, 0, 40)
+    label.Position = UDim2.new(0, 0, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = "Sección: Visual"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 20
+
+    local espOptions = {
+        "Box", "Name", "Health", "Distance", "Tracer", "Skeleton", "Highlight"
+    }
+
+    local yOffset = 80
+    for _, opt in ipairs(espOptions) do
+        local toggle = Instance.new("TextButton", content)
+        toggle.Size = UDim2.new(1, -40, 0, 30)
+        toggle.Position = UDim2.new(0, 20, 0, yOffset)
+        toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        toggle.TextColor3 = Color3.new(1, 1, 1)
+        toggle.Font = Enum.Font.GothamBold
+        toggle.TextSize = 14
+        toggle.Text = "👁 " .. opt .. " [OFF]"
+        Instance.new("UICorner", toggle).CornerRadius = UDim.new(0, 8)
+
+        local active = false
+        toggle.MouseButton1Click:Connect(function()
+            active = not active
+            toggle.Text = "👁 " .. opt .. (active and " [ON]" or " [OFF]")
+        end)
+
+        yOffset += 35
+    end
+
+    local espBtn = Instance.new("TextButton", content)
+    espBtn.Size = UDim2.new(1, -40, 0, 40)
+    espBtn.Position = UDim2.new(0, 20, 0, yOffset + 10)
+    espBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 200)
+    espBtn.TextColor3 = Color3.new(1, 1, 1)
+    espBtn.Font = Enum.Font.GothamBold
+    espBtn.TextSize = 16
+    espBtn.Text = "⚡ Activar ESP real"
+    Instance.new("UICorner", espBtn).CornerRadius = UDim.new(0, 8)
+
+    espBtn.MouseButton1Click:Connect(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zlc1004/robloxScript/main/esp.lua"))()
+    end)
+
+    content.CanvasSize = UDim2.new(0, 0, 0, yOffset + 80)
+end
+
+-- Función: Hubs (ejecución directa)
+local function showHubs()
+    clearContent()
+
+    local label = Instance.new("TextLabel", content)
+    label.Size = UDim2.new(1, 0, 0, 40)
+    label.Position = UDim2.new(0, 0, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = "Sección: Hubs"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 20
+
+    local hubs = {
+        ["🧠 Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
+        ["🧬 Vega X"] = "https://raw.githubusercontent.com/VegaxHub/VegaX/main/Main.lua",
+        ["🛰️ Orion"] = "https://raw.githubusercontent.com/OrionHub/Main/main.lua",
+        ["🏙️ CDMX"] = "https://raw.githubusercontent.com/cdmxhub/scripts/main/main.lua",
+        ["🌌 HoHo Hub"] = "https://raw.githubusercontent.com/HoHoHub/Script/main/HoHoHub.lua",
+        ["🌑 Darkrai X"] = "https://raw.githubusercontent.com/RandomScripter/DarkraiX/main/Main.lua",
+        ["⚡ Xenon Hub"] = "https://raw.githubusercontent.com/XenonHubProject/Main/main.lua",
+        ["👁️ ESP Universal"] = "https://raw.githubusercontent.com/zlc1004/robloxScript/main/esp.lua"
+    }
+
+    local yOffset = 80
+    for name, url in pairs(hubs) do
+        local btn = Instance.new("TextButton", content)
+        btn.Size = UDim2.new(1, -40, 0, 30)
+        btn.Position = UDim2.new(0, 20, 0, yOffset)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.TextColor3 = Color3.new(1, 1, 1)
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 14
+        btn.Text = name
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
+
+        btn.MouseButton1Click:Connect(function()
+            local success, err = pcall(function()
+                loadstring(game:HttpGet(url))()
+            end)
+            if not success then
+                warn("Error al ejecutar " .. name .. ": " .. tostring(err))
+            end
+        end)
+
+        yOffset += 35
+    end
+
+    content.CanvasSize = UDim2.new(0, 0, 0, yOffset + 60)
 end
