@@ -343,9 +343,17 @@ avatar.ScaleType = Enum.ScaleType.Fit
 local nameLabel = Instance.new("TextLabel", profileFrame)
 nameLabel.Size = UDim2.new(1, -60, 0, 20)
 nameLabel.Position = UDim2.new(0, 60, 0, 20)
-nameLabel.Text = game.Players.LocalPlayer.Name
-nameLabel.TextColor3 = Color3.new(1, 1, 1)
-nameLabel.Font = Enum.Font.Gotham
-nameLabel.TextSize = 14
-nameLabel.BackgroundTransparency = 1
-nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+btn3.MouseButton1Click:Connect(function()
+    espModular.box = not espModular.box
+    espModular.tracer = not espModular.tracer
+    espModular.name = not espModular.name
+    btn3.Text = espModular.box and "Desactivar Modular" or "ESP Modular"
+    btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
+end)
+
+end -- cierre de MouseButton1Click
+end -- cierre de createSection(name)
+
+createSection("Main")
+createSection("Visual")
+createSection("Hubs")
