@@ -290,9 +290,12 @@ elseif name == "Visual" then
             btn2.TextSize = 14
             btn2.MouseButton1Click:Connect(function()
                 espMinimal = not espMinimal
-                btn2.Text = espMinimal and "Desactivar Minimal" or "ESP Minimal"
-                btn2.BackgroundColor3 = espMinimal and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
-            end)
+                end) -- cierre de MouseButton1Click del botón "Hubs"
+elseif name == "Visual" then
+    -- ESP Universal, Minimal, Modular
+end
+                end -- cierre de createSection(name)
+                end)
 
             local btn3 = Instance.new("TextButton", content)
             btn3.Size = UDim2.new(0, 180, 0, 30)
