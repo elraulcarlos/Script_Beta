@@ -144,28 +144,40 @@ local function createSection(name)
             end)
 
         elseif name == "Hubs" then
-            local iyBtn = Instance.new("TextButton", content)
-            iyBtn.Size = UDim2.new(0, 180, 0, 30)
-            iyBtn.Position = UDim2.new(0, 10, 0, 60)
-            iyBtn.Text = "Ejecutar InfinityYield"
-            iyBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-            iyBtn.TextColor3 = Color3.new(1, 1, 1)
-            iyBtn.Font = Enum.Font.GothamBold
-            iyBtn.TextSize = 14
+            local hubs = {
+                {name = "InfinityYield", url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+                {name = "CMD-X", url = "https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source"},
+                {name = "DarkHub", url = "https://raw.githubusercontent.com/RandomAdamYT/DarkHub/master/Init"},
+                {name = "OwlHub", url = "https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"}
+            }
 
-            iyBtn.MouseButton1Click:Connect(function()
-                local success, err = pcall(function()
-                    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+            local y = 60
+            for _, hub in ipairs(hubs) do
+                local btn = Instance.new("TextButton", content)
+                btn.Size = UDim2.new(0, 180, 0, 30)
+                btn.Position = UDim2.new(0, 10, 0, y)
+                btn.Text = "Ejecutar " .. hub.name
+                btn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+                btn.TextColor3 = Color3.new(1, 1, 1)
+                btn.Font = Enum.Font.GothamBold
+                btn.TextSize = 14
+
+                btn.MouseButton1Click:Connect(function()
+                    local success, err = pcall(function()
+                        loadstring(game:HttpGet(hub.url))()
+                    end)
+
+                    if not success then
+                        btn.Text = hub.name .. " Error"
+                        btn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                    else
+                        btn.Text = hub.name .. " Cargado"
+                        btn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+                    end
                 end)
 
-                if not success then
-                    iyBtn.Text = "InfinityYield"
-                    iyBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                else
-                    iyBtn.Text = "InfinityYield"
-                    iyBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                end
-            end)
+                y = y + 40
+            end
         end
     end)
 end
@@ -227,30 +239,29 @@ elseif name == "Visual" then
                         objs.box.Visible = false
                         objs.tracer.Visible = false
                         objs.nameTag.Visible = false
-                        continue
-                    end
-
-                    local root = char.HumanoidRootPart
-                    local pos, onScreen = camera:WorldToViewportPoint(root.Position)
-
-                    if onScreen then
-                        local hp = char:FindFirstChildOfClass("Humanoid") and math.floor(char:FindFirstChildOfClass("Humanoid").Health) or 0
-                        local size = Vector2.new(50, 100)
-
-                        objs.box.Size = size
-                        objs.box.Position = Vector2.new(pos.X - size.X/2, pos.Y - size.Y/2)
-                        objs.tracer.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-                        objs.tracer.To = Vector2.new(pos.X, pos.Y)
-                        objs.nameTag.Text = player.Name .. " [" .. hp .. " HP]"
-                        objs.nameTag.Position = Vector2.new(pos.X, pos.Y - 60)
-
-                        objs.box.Visible = espUniversal or espModular.box
-                        objs.tracer.Visible = espUniversal or espModular.tracer
-                        objs.nameTag.Visible = espUniversal or espMinimal or espModular.name
                     else
-                        objs.box.Visible = false
-                        objs.tracer.Visible = false
-                        objs.nameTag.Visible = false
+                        local root = char.HumanoidRootPart
+                        local pos, onScreen = camera:WorldToViewportPoint(root.Position)
+
+                        if onScreen then
+                            local hp = char:FindFirstChildOfClass("Humanoid") and math.floor(char:FindFirstChildOfClass("Humanoid").Health) or 0
+                            local size = Vector2.new(50, 100)
+
+                            objs.box.Size = size
+                            objs.box.Position = Vector2.new(pos.X - size.X/2, pos.Y - size.Y/2)
+                            objs.tracer.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
+                            objs.tracer.To = Vector2.new(pos.X, pos.Y)
+                            objs.nameTag.Text = player.Name .. " [" .. hp .. " HP]"
+                            objs.nameTag.Position = Vector2.new(pos.X, pos.Y - 60)
+
+                            objs.box.Visible = espUniversal or espModular.box
+                            objs.tracer.Visible = espUniversal or espModular.tracer
+                            objs.nameTag.Visible = espUniversal or espMinimal or espModular.name
+                        else
+                            objs.box.Visible = false
+                            objs.tracer.Visible = false
+                            objs.nameTag.Visible = false
+                        end
                     end
                 end
             end)
@@ -304,7 +315,6 @@ end
 
 createSection("Main")
 createSection("Visual")
-createSection("Aura")
 createSection("Hubs")
 
 main.Visible = true
