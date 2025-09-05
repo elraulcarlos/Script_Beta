@@ -1,21 +1,12 @@
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local Workspace = game:GetService("Workspace")
-
-local LocalPlayer = Players.LocalPlayer
-local Camera = Workspace.CurrentCamera
-
 -- GUI base
-local gui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 gui.Name = "ScriptBetaUI"
 gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
 
--- Marco principal (adaptado a móvil)
+-- Marco principal
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0.9, 0, 0.8, 0)
+frame.Size = UDim2.new(0.85, 0, 0.75, 0)
 frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -25,7 +16,7 @@ frame.Active = true
 frame.Draggable = false
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
--- Encabezado movible
+-- Encabezado
 local header = Instance.new("Frame", frame)
 header.Size = UDim2.new(1, 0, 0, 40)
 header.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -109,16 +100,16 @@ end)
 
 -- Sidebar
 local sidebar = Instance.new("Frame", frame)
-sidebar.Size = UDim2.new(0, 120, 1, 0)
-sidebar.Position = UDim2.new(0, 0, 0, 0)
+sidebar.Size = UDim2.new(0, 120, 1, -40)
+sidebar.Position = UDim2.new(0, 0, 0, 40)
 sidebar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 sidebar.BorderSizePixel = 0
 Instance.new("UICorner", sidebar).CornerRadius = UDim.new(0, 0)
 
--- Área de contenido con scroll dinámico
+-- Área de contenido
 local content = Instance.new("ScrollingFrame", frame)
-content.Size = UDim2.new(1, -120, 1, 0)
-content.Position = UDim2.new(0, 120, 0, 0)
+content.Size = UDim2.new(1, -120, 1, -40)
+content.Position = UDim2.new(0, 120, 0, 40)
 content.BackgroundTransparency = 1
 content.CanvasSize = UDim2.new(0, 0, 0, 0)
 content.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -131,34 +122,7 @@ local function clearContent()
     end
 end
 
-local function createSidebarButton(name, yOffset, callback)
-    local btn = Instance.new("TextButton", sidebar)
-    btn.Size = UDim2.new(1, 0, 0, 40)
-    btn.Position = UDim2.new(0, 0, 0, yOffset)
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.GothamBold
-    btn.TextSize = 16
-    btn.Text = name
-    btn.BorderSizePixel = 0
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
-    btn.MouseEnter:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(70, 70, 70)}):Play()
-    end)
-    btn.MouseLeave:Connect(function()
-        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
-    end)
-    btn.MouseButton1Click:Connect(callback)
-end
-
--- Activar secciones
-createSidebarButton("Main", 20, showMain)
-createSidebarButton("Teleport", 70, showTeleport)
-createSidebarButton("Visual", 120, showVisual)
-createSidebarButton("Hubs", 170, showHubs)
-createSidebarButton("Automatic", 220, showAutomatic)
-
--- Sección Main con Fly estilo Infinite Yield
+-- Función: Main (Fly)
 local function showMain()
     clearContent()
 
@@ -171,7 +135,6 @@ local function showMain()
     label.Font = Enum.Font.GothamBold
     label.TextSize = 20
 
-    local UIS = game:GetService("UserInputService")
     local flying = false
     local speed = 2
     local direction = Vector3.zero
@@ -196,7 +159,7 @@ local function showMain()
         if flyBG then flyBG:Destroy() end
     end
 
-    UIS.InputBegan:Connect(function(input, gpe)
+    UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.W then direction += Vector3.new(0, 0, -1) end
         if input.KeyCode == Enum.KeyCode.S then direction += Vector3.new(0, 0, 1) end
@@ -206,7 +169,7 @@ local function showMain()
         if input.KeyCode == Enum.KeyCode.LeftShift then direction += Vector3.new(0, -1, 0) end
     end)
 
-    UIS.InputEnded:Connect(function(input, gpe)
+    UserInputService.InputEnded:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.W then direction -= Vector3.new(0, 0, -1) end
         if input.KeyCode == Enum.KeyCode.S then direction -= Vector3.new(0, 0, 1) end
@@ -245,7 +208,7 @@ local function showMain()
     end)
 end
 
--- Sección Automatic con interruptor para completar fogata
+-- Función: Automatic (Fogata)
 local function showAutomatic()
     clearContent()
 
