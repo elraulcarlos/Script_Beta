@@ -293,53 +293,6 @@ elseif name == "Visual" then
                 end) -- cierre de MouseButton1Click
 end   -- cierre de createSection(name)
 
-createSection("Main")
-createSection("Visual")
-createSection("Hubs")
-                end -- cierre de createSection(name)
-                end)
-
-            local btn3 = Instance.new("TextButton", content)
-            btn3.Size = UDim2.new(0, 180, 0, 30)
-            btn3.Position = UDim2.new(0, 10, 0, 140)
-            btn3.Text = "ESP Modular"
-            btn3.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-            btn3.TextColor3 = Color3.new(1, 1, 1)
-            btn3.Font = Enum.Font.GothamBold
-            btn3.TextSize = 14
-            btn3.MouseButton1Click:Connect(function()
-                espModular.box = not espModular.box
-                espModular.tracer = not espModular.tracer
-                espModular.name = not espModular.name
-                btn3.Text = espModular.box and "Desactivar Modular" or "ESP Modular"
-                btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
-            end)
-        end
-    end)
-end
-
-createSection("Main")
-createSection("Visual")
-createSection("Hubs")
-
-main.Visible = true
-openBtn.Visible = false
-
-local profileFrame = Instance.new("Frame", sidebar)
-profileFrame.Size = UDim2.new(1, 0, 0, 60)
-profileFrame.AnchorPoint = Vector2.new(0, 1)
-profileFrame.Position = UDim2.new(0, 0, 1, 0)
-profileFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-profileFrame.BackgroundTransparency = 0.2
-profileFrame.BorderSizePixel = 0
-
-local avatar = Instance.new("ImageLabel", profileFrame)
-avatar.Size = UDim2.new(0, 40, 0, 40)
-avatar.Position = UDim2.new(0, 10, 0, 10)
-avatar.BackgroundTransparency = 1
-avatar.Image = "rbxthumb://type=AvatarHeadShot&id="..game.Players.LocalPlayer.UserId.."&w=60&h=60"
-avatar.ScaleType = Enum.ScaleType.Fit
-
 local btn3 = Instance.new("TextButton", content)
 btn3.Size = UDim2.new(0, 180, 0, 30)
 btn3.Position = UDim2.new(0, 10, 0, 140)
@@ -349,3 +302,15 @@ btn3.TextColor3 = Color3.new(1, 1, 1)
 btn3.Font = Enum.Font.GothamBold
 btn3.TextSize = 14
 btn3.MouseButton1Click:Connect(function()
+    espModular.box = not espModular.box
+    espModular.tracer = not espModular.tracer
+    espModular.name = not espModular.name
+    btn3.Text = espModular.box and "Desactivar Modular" or "ESP Modular"
+    btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
+end)
+
+createSection("Main")
+createSection("Visual")
+createSection("Hubs")
+                end -- cierre de createSection(name)
+                end)
