@@ -351,9 +351,10 @@ btn3.MouseButton1Click:Connect(function()
     btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
 end)
 
-end -- cierre de MouseButton1Click
-end -- cierre de createSection(name)
-
-createSection("Main")
-createSection("Visual")
-createSection("Hubs")
+elseif name == "Visual" then
+    -- btn1: ESP Universal
+    -- btn2: ESP Minimal
+    -- 🔽 Aquí pegas btn3: ESP Modular
+end
+ end) -- cierre de MouseButton1Click
+end   -- cierre de createSection(name)
