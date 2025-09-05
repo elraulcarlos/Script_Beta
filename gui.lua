@@ -1,315 +1,191 @@
-repeat wait() until game:IsLoaded()
-wait(2)
+--[[
+🧠 Script_Beta v1
+Interfaz estilo macOS con menú vertical, ESPs, minimizador y restaurador
+]]
 
-pcall(function()
-    local sound = Instance.new("Sound")
-    sound.SoundId = "rbxassetid://9118823104"
-    sound.Volume = 1
-    sound.PlayOnRemove = true
-    sound.Parent = game.CoreGui
-    sound:Destroy()
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "ScriptBeta",
-        Text = "Interfaz cargada correctamente ✅",
-        Duration = 5
-    })
-end)
-
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "ScriptBeta"
+local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+gui.Name = "MacStyleUI"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
 
-local openBtn = Instance.new("TextButton", gui)
-openBtn.Size = UDim2.new(0, 120, 0, 40)
-openBtn.Position = UDim2.new(0, 20, 0, 20)
-openBtn.Text = "Abrir GUI"
-openBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-openBtn.TextColor3 = Color3.new(1, 1, 1)
-openBtn.Font = Enum.Font.GothamBold
-openBtn.TextSize = 14
-openBtn.Visible = false
-openBtn.Active = true
-openBtn.Draggable = true
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 500, 0, 320)
+frame.Position = UDim2.new(0.5, -250, 0.5, -160)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BackgroundTransparency = 0.2
+frame.BorderSizePixel = 0
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Active = true
+frame.Draggable = false
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 420, 0, 300)
-main.Position = UDim2.new(0.5, -210, 0.5, -150)
-main.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-main.BackgroundTransparency = 0.2
-main.BorderSizePixel = 0
-main.Active = true
-main.Draggable = true
-Instance.new("UICorner", main).CornerRadius = UDim.new(0, 8)
+-- Encabezado Script_Beta v1
+local scriptTitle = Instance.new("TextLabel", frame)
+scriptTitle.Size = UDim2.new(1, -40, 0, 30)
+scriptTitle.Position = UDim2.new(0, 20, 0, 10)
+scriptTitle.BackgroundTransparency = 1
+scriptTitle.Text = "🧠 Script_Beta v1"
+scriptTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+scriptTitle.Font = Enum.Font.GothamBold
+scriptTitle.TextSize = 16
+scriptTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-local header = Instance.new("Frame", main)
-header.Size = UDim2.new(1, 0, 0, 30)
-header.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-header.BackgroundTransparency = 0.2
-header.BorderSizePixel = 0
-
-local title = Instance.new("TextLabel", header)
-title.Size = UDim2.new(1, -30, 1, 0)
-title.Position = UDim2.new(0, 10, 0, 0)
-title.Text = "ScriptBeta — Interfaz Moderna"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.BackgroundTransparency = 1
-title.TextXAlignment = Enum.TextXAlignment.Left
-
-local minimizeBtn = Instance.new("TextButton", header)
-minimizeBtn.Size = UDim2.new(0, 30, 1, 0)
-minimizeBtn.Position = UDim2.new(1, -30, 0, 0)
-minimizeBtn.Text = "_"
-minimizeBtn.BackgroundColor3 = Color3.fromRGB(255, 170, 0)
+-- Botón minimizar
+local minimizeBtn = Instance.new("TextButton", frame)
+minimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+minimizeBtn.Position = UDim2.new(1, -40, 0, 10)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 minimizeBtn.TextColor3 = Color3.new(1, 1, 1)
 minimizeBtn.Font = Enum.Font.GothamBold
 minimizeBtn.TextSize = 14
+minimizeBtn.Text = "-"
+minimizeBtn.BorderSizePixel = 0
+Instance.new("UICorner", minimizeBtn).CornerRadius = UDim.new(0, 6)
+
+-- Botón flotante para restaurar
+local restoreBtn = Instance.new("TextButton", gui)
+restoreBtn.Size = UDim2.new(0, 140, 0, 40)
+restoreBtn.Position = UDim2.new(0, 20, 1, -60)
+restoreBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+restoreBtn.TextColor3 = Color3.new(1, 1, 1)
+restoreBtn.Font = Enum.Font.GothamBold
+restoreBtn.TextSize = 14
+restoreBtn.Text = "Abrir Script_Beta"
+restoreBtn.BorderSizePixel = 0
+Instance.new("UICorner", restoreBtn).CornerRadius = UDim.new(0, 8)
+restoreBtn.Visible = false
 
 minimizeBtn.MouseButton1Click:Connect(function()
-    main.Visible = false
-    openBtn.Visible = true
+    frame.Visible = false
+    restoreBtn.Visible = true
 end)
 
-openBtn.MouseButton1Click:Connect(function()
-    main.Visible = true
-    openBtn.Visible = false
+restoreBtn.MouseButton1Click:Connect(function()
+    frame.Visible = true
+    restoreBtn.Visible = false
 end)
 
-local sidebar = Instance.new("Frame", main)
-sidebar.Size = UDim2.new(0, 100, 1, -30)
-sidebar.Position = UDim2.new(0, 0, 0, 30)
-sidebar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-sidebar.BackgroundTransparency = 0.2
+-- Sidebar vertical
+local sidebar = Instance.new("Frame", frame)
+sidebar.Size = UDim2.new(0, 120, 1, 0)
+sidebar.Position = UDim2.new(0, 0, 0, 0)
+sidebar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 sidebar.BorderSizePixel = 0
+Instance.new("UICorner", sidebar).CornerRadius = UDim.new(0, 0)
 
-local content = Instance.new("Frame", main)
-content.Size = UDim2.new(1, -100, 1, -30)
-content.Position = UDim2.new(0, 100, 0, 30)
-content.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-content.BackgroundTransparency = 0.2
-content.BorderSizePixel = 0
+-- Área de contenido
+local content = Instance.new("Frame", frame)
+content.Size = UDim2.new(1, -120, 1, 0)
+content.Position = UDim2.new(0, 120, 0, 0)
+content.BackgroundTransparency = 1
 
 local function clearContent()
-    for _, child in pairs(content:GetChildren()) do
+    for _, child in ipairs(content:GetChildren()) do
         child:Destroy()
     end
 end
 
-local sectionY = 5
-local function createSection(name)
+local function createSidebarButton(name, yOffset, callback)
     local btn = Instance.new("TextButton", sidebar)
-    btn.Size = UDim2.new(1, 0, 0, 30)
-    btn.Position = UDim2.new(0, 0, 0, sectionY)
-    btn.Text = name
+    btn.Size = UDim2.new(1, 0, 0, 40)
+    btn.Position = UDim2.new(0, 0, 0, yOffset)
     btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btn.BackgroundTransparency = 0.2
-    btn.TextColor3 = Color3.new(1, 1, 1)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 13
-    sectionY = sectionY + 35
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamBold
+    btn.TextSize = 16
+    btn.Text = name
+    btn.BorderSizePixel = 0
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
 
-    btn.MouseButton1Click:Connect(function()
-        clearContent()
-
-        local label = Instance.new("TextLabel", content)
-        label.Size = UDim2.new(1, -20, 0, 30)
-        label.Position = UDim2.new(0, 10, 0, 10)
-        label.Text = "Sección: " .. name
-        label.TextColor3 = Color3.new(1, 1, 1)
-        label.Font = Enum.Font.GothamBold
-        label.TextSize = 16
-        label.BackgroundTransparency = 1
-
-        if name == "Main" then
-            local slider = Instance.new("TextButton", content)
-            slider.Size = UDim2.new(0, 200, 0, 30)
-            slider.Position = UDim2.new(0, 10, 0, 60)
-            slider.Text = "Velocidad: 100"
-            slider.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-            slider.TextColor3 = Color3.new(1, 1, 1)
-            slider.Font = Enum.Font.GothamBold
-            slider.TextSize = 14
-
-            local speed = 100
-            slider.MouseButton1Click:Connect(function()
-                speed = speed + 25
-                if speed > 200 then speed = 25 end
-                slider.Text = "Velocidad: " .. speed
-                local lp = game.Players.LocalPlayer
-                if lp.Character and lp.Character:FindFirstChild("Humanoid") then
-                    lp.Character.Humanoid.WalkSpeed = speed
-                end
-            end)
-
-        elseif name == "Hubs" then
-            local hubs = {
-                {name = "InfinityYield", url = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
-                {name = "CMD-X", url = "https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source"},
-                {name = "DarkHub", url = "https://raw.githubusercontent.com/RandomAdamYT/DarkHub/master/Init"},
-                {name = "OwlHub", url = "https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"}
-            }
-
-            local y = 60
-            for _, hub in ipairs(hubs) do
-                local btn = Instance.new("TextButton", content)
-                btn.Size = UDim2.new(0, 180, 0, 30)
-                btn.Position = UDim2.new(0, 10, 0, y)
-                btn.Text = "Ejecutar " .. hub.name
-                btn.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-                btn.TextColor3 = Color3.new(1, 1, 1)
-                btn.Font = Enum.Font.GothamBold
-                btn.TextSize = 14
-
-                btn.MouseButton1Click:Connect(function()
-                    local success, err = pcall(function()
-                        loadstring(game:HttpGet(hub.url))()
-                    end)
-
-                    if not success then
-                        btn.Text = hub.name .. " Error"
-                        btn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-                    else
-                        btn.Text = hub.name .. " Cargado"
-                        btn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-                    end
-                end)
-
-                y = y + 40
-            end
-        end
+    btn.MouseEnter:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(70, 70, 70)}):Play()
     end)
+
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
+    end)
+
+    btn.MouseButton1Click:Connect(callback)
 end
-elseif name == "Visual" then
-            local Players = game:GetService("Players")
-            local RunService = game:GetService("RunService")
-            local camera = workspace.CurrentCamera
-            local localPlayer = Players.LocalPlayer
 
-            local drawings = {}
-            local espUniversal = false
-            local espMinimal = false
-            end) -- cierre de MouseButton1Click
-            local function createESP(player)
-                if player == localPlayer then return end
-                local char = player.Character
-                if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+local function showMain()
+    clearContent()
+    local label = Instance.new("TextLabel", content)
+    label.Size = UDim2.new(1, 0, 0, 40)
+    label.Position = UDim2.new(0, 0, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = "Sección: Main"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 20
+end
 
-                local box = Drawing.new("Square")
-                box.Thickness = 1
-                box.Color = Color3.fromRGB(0, 255, 0)
-                box.Filled = false
-                box.Visible = false
+local function showVisual()
+    clearContent()
 
-                local tracer = Drawing.new("Line")
-                tracer.Thickness = 1
-                tracer.Color = Color3.fromRGB(255, 255, 0)
-                tracer.Visible = false
+    local label = Instance.new("TextLabel", content)
+    label.Size = UDim2.new(1, 0, 0, 40)
+    label.Position = UDim2.new(0, 0, 0, 20)
+    label.BackgroundTransparency = 1
+    label.Text = "Sección: Visual"
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 20
 
-                local nameTag = Drawing.new("Text")
-                nameTag.Size = 14
-                nameTag.Color = Color3.fromRGB(255, 255, 255)
-                nameTag.Center = true
-                nameTag.Outline = true
-                nameTag.Visible = false
+    local function createESPButton(text, yOffset, toggleVar)
+        local btn = Instance.new("TextButton", content)
+        btn.Size = UDim2.new(0, 300, 0, 40)
+        btn.Position = UDim2.new(0, 20, 0, yOffset)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.GothamBold
+        btn.TextSize = 16
+        btn.Text = text
+        btn.BorderSizePixel = 0
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
 
-                drawings[player] = {box = box, tracer = tracer, nameTag = nameTag}
-            end
+        btn.MouseButton1Click:Connect(function()
+            _G[toggleVar] = not _G[toggleVar]
+            btn.Text = _G[toggleVar] and "Desactivar " .. text or text
+            btn.BackgroundColor3 = _G[toggleVar] and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(50, 50, 50)
+        end)
+    end
 
-            for _, p in pairs(Players:GetPlayers()) do
-                createESP(p)
-            end
+    createESPButton("ESP Universal", 80, "espUniversal")
+    createESPButton("ESP Minimal", 130, "espMinimal")
+    createESPButton("ESP Modular", 180, "espModular")
+end
 
-            Players.PlayerAdded:Connect(createESP)
-            Players.PlayerRemoving:Connect(function(p)
-                if drawings[p] then
-                    for _, d in pairs(drawings[p]) do
-                        d:Remove()
-                    end
-                    drawings[p] = nil
-                end
-            end)
+createSidebarButton("Main", 20, showMain)
+createSidebarButton("Visual", 70, showVisual)
 
-            RunService.RenderStepped:Connect(function()
-                for player, objs in pairs(drawings) do
-                    local char = player.Character
-                    if not char or not char:FindFirstChild("HumanoidRootPart") then
-                        objs.box.Visible = false
-                        objs.tracer.Visible = false
-                        objs.nameTag.Visible = false
-                    else
-                        local root = char.HumanoidRootPart
-                        local pos, onScreen = camera:WorldToViewportPoint(root.Position)
+-- Movimiento por deslizamiento desde arriba o abajo
+local dragging = false
+local dragStart
+local startPos
 
-                        if onScreen then
-                            local hp = char:FindFirstChildOfClass("Humanoid") and math.floor(char:FindFirstChildOfClass("Humanoid").Health) or 0
-                            local size = Vector2.new(50, 100)
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
 
-                            objs.box.Size = size
-                            objs.box.Position = Vector2.new(pos.X - size.X/2, pos.Y - size.Y/2)
-                            objs.tracer.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
-                            objs.tracer.To = Vector2.new(pos.X, pos.Y)
-                            objs.nameTag.Text = player.Name .. " [" .. hp .. " HP]"
-                            objs.nameTag.Position = Vector2.new(pos.X, pos.Y - 60)
-
-                            objs.box.Visible = espUniversal or espModular.box
-                            objs.tracer.Visible = espUniversal or espModular.tracer
-                            objs.nameTag.Visible = espUniversal or espMinimal or espModular.name
-                        else
-                            objs.box.Visible = false
-                            objs.tracer.Visible = false
-                            objs.nameTag.Visible = false
-                        end
-                    end
-                end
-            end)
-
-            local btn1 = Instance.new("TextButton", content)
-            btn1.Size = UDim2.new(0, 180, 0, 30)
-            btn1.Position = UDim2.new(0, 10, 0, 60)
-            btn1.Text = "ESP Universal"
-            btn1.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-            btn1.TextColor3 = Color3.new(1, 1, 1)
-            btn1.Font = Enum.Font.GothamBold
-            btn1.TextSize = 14
-            btn1.MouseButton1Click:Connect(function()
-                espUniversal = not espUniversal
-                btn1.Text = espUniversal and "Desactivar Universal" or "ESP Universal"
-                btn1.BackgroundColor3 = espUniversal and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
-            end)
-
-            local btn2 = Instance.new("TextButton", content)
-            btn2.Size = UDim2.new(0, 180, 0, 30)
-            btn2.Position = UDim2.new(0, 10, 0, 100)
-            btn2.Text = "ESP Minimal"
-            btn2.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-            btn2.TextColor3 = Color3.new(1, 1, 1)
-            btn2.Font = Enum.Font.GothamBold
-            btn2.TextSize = 14
-            btn2.MouseButton1Click:Connect(function()
-                espMinimal = not espMinimal
-                end) -- cierre de MouseButton1Click
-end   -- cierre de createSection(name)
-
-local btn3 = Instance.new("TextButton", content)
-btn3.Size = UDim2.new(0, 180, 0, 30)
-btn3.Position = UDim2.new(0, 10, 0, 140)
-btn3.Text = "ESP Modular"
-btn3.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-btn3.TextColor3 = Color3.new(1, 1, 1)
-btn3.Font = Enum.Font.GothamBold
-btn3.TextSize = 14
-btn3.MouseButton1Click:Connect(function()
-    espModular.box = not espModular.box
-    espModular.tracer = not espModular.tracer
-    espModular.name = not espModular.name
-    btn3.Text = espModular.box and "Desactivar Modular" or "ESP Modular"
-    btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.Position.Y <= frame.AbsolutePosition.Y + 40 or input.Position.Y >= frame.AbsolutePosition.Y + frame.AbsoluteSize.Y - 40 then
+            dragging = true
+[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/cjdjmj/aaa42/tree/43ef68a79bec18dc8f122bba912145517cfbb80f/README.md?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")
+ 
+                frame.InputChanged:Connect(function(input)
+  if dragging and (input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement) then
+        update(input)
+    end
 end)
 
-createSection("Main")
-createSection("Visual")
-createSection("Hubs")
-                end -- cierre de createSection(name)
-                end)
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
