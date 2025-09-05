@@ -340,9 +340,14 @@ avatar.BackgroundTransparency = 1
 avatar.Image = "rbxthumb://type=AvatarHeadShot&id="..game.Players.LocalPlayer.UserId.."&w=60&h=60"
 avatar.ScaleType = Enum.ScaleType.Fit
 
-local nameLabel = Instance.new("TextLabel", profileFrame)
-nameLabel.Size = UDim2.new(1, -60, 0, 20)
-nameLabel.Position = UDim2.new(0, 60, 0, 20)
+local btn3 = Instance.new("TextButton", content)
+btn3.Size = UDim2.new(0, 180, 0, 30)
+btn3.Position = UDim2.new(0, 10, 0, 140)
+btn3.Text = "ESP Modular"
+btn3.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+btn3.TextColor3 = Color3.new(1, 1, 1)
+btn3.Font = Enum.Font.GothamBold
+btn3.TextSize = 14
 btn3.MouseButton1Click:Connect(function()
     espModular.box = not espModular.box
     espModular.tracer = not espModular.tracer
@@ -350,11 +355,3 @@ btn3.MouseButton1Click:Connect(function()
     btn3.Text = espModular.box and "Desactivar Modular" or "ESP Modular"
     btn3.BackgroundColor3 = espModular.box and Color3.fromRGB(255, 60, 60) or Color3.fromRGB(0, 200, 0)
 end)
-
-elseif name == "Visual" then
-    -- btn1: ESP Universal
-    -- btn2: ESP Minimal
-    -- 🔽 Aquí pegas btn3: ESP Modular
-end
- end) -- cierre de MouseButton1Click
-end   -- cierre de createSection(name)
