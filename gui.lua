@@ -190,8 +190,7 @@ elseif name == "Visual" then
             local drawings = {}
             local espUniversal = false
             local espMinimal = false
-            local espModular = {box = false, tracer = false, name = false}
-
+            end) -- cierre de MouseButton1Click
             local function createESP(player)
                 if player == localPlayer then return end
                 local char = player.Character
