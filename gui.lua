@@ -290,10 +290,12 @@ elseif name == "Visual" then
             btn2.TextSize = 14
             btn2.MouseButton1Click:Connect(function()
                 espMinimal = not espMinimal
-                end) -- cierre de MouseButton1Click del botón "Hubs"
-elseif name == "Visual" then
-    -- ESP Universal, Minimal, Modular
-end
+                end) -- cierre de MouseButton1Click
+end   -- cierre de createSection(name)
+
+createSection("Main")
+createSection("Visual")
+createSection("Hubs")
                 end -- cierre de createSection(name)
                 end)
 
